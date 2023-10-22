@@ -2,6 +2,8 @@ namespace Despacho.Otimizado.Application.Results
 {
     public class Result : IResult
     {
+        public Result()
+        { }
         protected Result(bool succeed, string? error = null)
         {
             Succeed = succeed;

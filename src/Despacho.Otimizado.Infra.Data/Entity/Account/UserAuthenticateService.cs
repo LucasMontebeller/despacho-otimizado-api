@@ -12,17 +12,17 @@ namespace Despacho.Otimizado.Infra.Data.Entity.Account
     public class UserAuthenticateService : IUserAuthenticateService
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _userRepository;
         private readonly SignInManager<User> _signInManager;
         private static readonly RecordCache<User> UserCache = new(100);
         public UserAuthenticateService(
             IConfiguration configuration,
-            UserManager<User> userManager, 
+            IUserRepository userRepository, 
             SignInManager<User> signInManager
         )
         {
             _configuration = configuration;
-            _userManager = userManager;
+            _userRepository = userRepository;
             _signInManager = signInManager;
         }
 
@@ -76,7 +76,7 @@ namespace Despacho.Otimizado.Infra.Data.Entity.Account
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await _userRepository.GetRolesAsync(user);
             foreach (var userRole in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
@@ -87,7 +87,7 @@ namespace Despacho.Otimizado.Infra.Data.Entity.Account
 
         private async Task<User?> GetUserFromCacheAsync(string email)
         {
-            var user = UserCache.GetRecords().Where(x => x.Email == email).FirstOrDefault() ?? await _userManager.FindByEmailAsync(email);
+            var user = UserCache.GetRecords().Where(x => x.Email == email).FirstOrDefault() ?? await _userRepository.FindByEmailAsync(email);
             if (user is not null && !UserCache.ContainsRecord(user))
                 UserCache.Add(user);
 

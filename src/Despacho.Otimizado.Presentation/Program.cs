@@ -10,10 +10,13 @@ namespace Despacho.Otimizado.Presentation
             var builder = WebApplication.CreateBuilder(args);
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddControllers();
-            builder.Services.AddInfrastructure(builder.Configuration);
-            builder.Services.AddMediator();
+            builder.Services.AddApiVersion();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddMediator();
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddSecurity(builder.Configuration);
             builder.Services.AddSwagger(builder.Configuration);
 
             var app = builder.Build();
@@ -29,7 +32,8 @@ namespace Despacho.Otimizado.Presentation
             }
 
             app.UseHttpsRedirection();
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
