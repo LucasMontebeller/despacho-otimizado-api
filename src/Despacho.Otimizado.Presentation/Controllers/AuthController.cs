@@ -1,6 +1,5 @@
 using Despacho.Otimizado.Application.UseCases.Auth.Login;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Despacho.Otimizado.Presentation.Controllers;
@@ -21,13 +20,6 @@ public class AuthController : ControllerBase
     {
         var result = await _mediator.Send(request);
         return result.Succeed ? Ok(result) : UnprocessableEntity(result);
-    }
-
-    [HttpGet("teste")]
-    [Authorize]
-    public IActionResult Teste()
-    {
-        return Ok();
     }
 
 }
