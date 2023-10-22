@@ -1,5 +1,6 @@
 using Despacho.Otimizado.Application.Results;
 using MediatR;
+using Serilog;
 
 namespace Despacho.Otimizado.Application.UseCases
 {
@@ -11,12 +12,13 @@ namespace Despacho.Otimizado.Application.UseCases
         {
             try
             {
-                
+                return await HandleCommand(request);
             }
             catch (Exception ex)
             {                
+                Log.Error(ex, ex.TargetSite?.DeclaringType?.Name);
+                return Result<T>.Fail(default, "Erro ao processar os dados, tente novamente mais tarde.");
             }
-            return await HandleCommand(request);
         }
     }
 }

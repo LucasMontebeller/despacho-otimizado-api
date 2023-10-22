@@ -1,7 +1,8 @@
 namespace Despacho.Otimizado.Application.UseCases.Auth.Login
 {
-    public class LoginResponse
+    public struct LoginResponse
     {
-        public int Id { get; set; }
+        public string Token { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }
